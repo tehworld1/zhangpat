@@ -1,10 +1,12 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Patrick Zhang | Space Theme</title>
-  
+  <title>Patrick Zhang | Space Hero</title>
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,92 +23,59 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
     }
     body {
-      font-family: 'Montserrat', sans-serif;
-      background: #000; /* Fallback background (stars will be canvas) */
+      background-color: #000;
       color: #fff;
       overflow-x: hidden;
       scroll-behavior: smooth;
-      position: relative; /* For stacking the canvas behind content */
-    }
-
-    /*************************************
-     *          STARFIELD CANVAS
-     *************************************/
-    #stars {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -1; /* Behind everything */
-      display: block;
-      background: #000; /* Additional safety */
-    }
-
-    /*************************************
-     *         NAVIGATION BAR
-     *************************************/
-    nav {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      padding: 1rem 2rem;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(8px);
-      z-index: 999;
-    }
-    nav ul {
-      display: flex;
-      justify-content: flex-end;
-      list-style: none;
-    }
-    nav li {
-      margin-left: 2rem;
-    }
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.3s;
-    }
-    nav a:hover {
-      color: #cccccc;
     }
 
     /*************************************
      *          HERO SECTION
      *************************************/
-    header {
+    .hero {
+      position: relative;
+      height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
       text-align: center;
-      padding: 0 1rem;
+      overflow: hidden; /* So the star canvas doesn't scroll out of view */
     }
-    header h1 {
+    /* Canvas is contained to hero only */
+    .hero-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1; /* behind text */
+      background: #000;
+    }
+    .hero h1 {
       font-size: 3rem;
       font-weight: 600;
       margin-bottom: 1rem;
     }
-    header p {
+    .hero p {
       font-size: 1.2rem;
       max-width: 600px;
       line-height: 1.6;
-      color: #ccc;
+      color: #bbb;
+      margin: 0 auto;
     }
     .scroll-down {
       position: absolute;
       bottom: 2rem;
+      text-decoration: none;
+      color: #fff;
+      font-size: 0.9rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      color: #fff;
-      text-decoration: none;
-      font-size: 0.9rem;
       transition: transform 0.3s;
     }
     .scroll-down:hover {
@@ -129,16 +98,17 @@
       width: 90%;
       max-width: 1000px;
       margin: 0 auto;
+      padding-bottom: 3rem;
     }
     section {
-      padding: 4rem 0;
-      opacity: 0;                /* for fade-in animation */
-      transform: translateY(40px);
+      padding: 4rem 0 2rem 0;
+      transform: translateY(40px) scale(0.95); /* "Pop" effect start */
+      opacity: 0;
       transition: all 0.7s ease-out;
     }
     section.show {
+      transform: translateY(0) scale(1);
       opacity: 1;
-      transform: translateY(0);
     }
     section h2 {
       font-size: 2rem;
@@ -150,28 +120,44 @@
       display: block;
       width: 60px;
       height: 2px;
-      background: #ccc;
+      background: #666;
       margin-top: 8px;
     }
-    section p, section li {
+    section p {
       font-size: 1.1rem;
       line-height: 1.6;
-      color: #ccc;
+      color: #bbb;
+      margin-bottom: 1.5rem;
     }
+
+    /*************************************
+     *          LIST & HOVER
+     *************************************/
     ul.custom-list {
       list-style: none;
       padding-left: 0;
     }
     ul.custom-list li {
       position: relative;
-      padding-left: 1.2rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
+      padding: 0.5rem 1rem;
+      color: #ccc;
+      transition: transform 0.2s, background 0.2s;
+      border: 1px solid transparent;
+      border-radius: 4px;
     }
+    /* Simple bullet replacement */
     ul.custom-list li::before {
       content: "•";
-      position: absolute;
-      left: 0;
-      color: #ccc;
+      margin-right: 0.5rem;
+      color: #666;
+    }
+    /* Hover animation for each list item */
+    ul.custom-list li:hover {
+      transform: scale(1.05);
+      background: #111;
+      border: 1px solid #444;
+      color: #fff;
     }
 
     /*************************************
@@ -179,8 +165,8 @@
      *************************************/
     footer {
       text-align: center;
+      color: #444;
       padding: 2rem 0;
-      color: #777;
       font-size: 0.9rem;
     }
 
@@ -188,42 +174,27 @@
      *         RESPONSIVE DESIGN
      *************************************/
     @media (max-width: 768px) {
-      header h1 {
+      .hero h1 {
         font-size: 2rem;
       }
-      header p {
+      .hero p {
         font-size: 1rem;
-      }
-      nav ul {
-        justify-content: center;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- STARFIELD CANVAS -->
-  <canvas id="stars"></canvas>
-
-  <!-- NAVIGATION BAR -->
-  <nav>
-    <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="#birthday">Birthday</a></li>
-      <li><a href="#games">Games</a></li>
-      <li><a href="#extracurriculars">Extracurriculars</a></li>
-    </ul>
-  </nav>
-
   <!-- HERO SECTION -->
-  <header>
+  <div class="hero">
+    <canvas class="hero-canvas"></canvas>
     <h1>Patrick Zhang</h1>
-    <p>High School Student | Tech Guy | Gamer</p>
+    <p>High School Student | Tech Enthusiast | Gamer</p>
     <a href="#about" class="scroll-down">
       Scroll Down
       <span>↓</span>
     </a>
-  </header>
+  </div>
 
   <!-- MAIN CONTENT -->
   <main>
@@ -241,17 +212,13 @@
     <!-- Birthday Section -->
     <section id="birthday">
       <h2>Birthday 🎉</h2>
-      <p>
-        July 29th
-      </p>
+      <p>July 29th</p>
     </section>
 
     <!-- Games Section -->
     <section id="games">
       <h2>Games 🎮</h2>
-      <p>
-        Playing video games is a large part of my free time, so here are some of my current favorites:
-      </p>
+      <p>Playing video games is a large part of my free time, so here are some of my current favorites:</p>
       <ul class="custom-list">
         <li>Core Keeper</li>
         <li>Fortnite</li>
@@ -280,24 +247,26 @@
     &copy; 2025 Patrick Zhang
   </footer>
 
-  <!-- SCRIPT: STARFIELD + FADE-IN -->
+  <!-- SCRIPT: STARFIELD + POP-IN ANIMATIONS -->
   <script>
     /*******************************************************
-     * STARFIELD ANIMATION
+     * STARFIELD (Hero only)
      *******************************************************/
-    const canvas = document.getElementById('stars');
+    const canvas = document.querySelector('.hero-canvas');
     const ctx = canvas.getContext('2d');
     let starsArray = [];
 
     function initCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      canvas.width = document.querySelector('.hero').offsetWidth;
+      canvas.height = document.querySelector('.hero').offsetHeight;
     }
 
-    window.addEventListener('resize', initCanvas);
+    window.addEventListener('resize', () => {
+      initCanvas();
+      createStars(100); // Re-create stars on resize
+    });
 
     function createStars(num) {
-      // Clear previous stars
       starsArray = [];
       for (let i = 0; i < num; i++) {
         starsArray.push({
@@ -311,15 +280,15 @@
 
     function animateStars() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
       ctx.fillStyle = "#fff";
+
       for (let i = 0; i < starsArray.length; i++) {
         const star = starsArray[i];
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
         ctx.fill();
 
-        // Move star downward
+        // Move star downward (like falling stars)
         star.y += star.speed;
 
         // If star goes off-screen, reset to top
@@ -328,20 +297,20 @@
           star.y = -star.radius;
         }
       }
-
       requestAnimationFrame(animateStars);
     }
 
-    // Initialize canvas and starfield
+    // Initialize starfield
     initCanvas();
-    createStars(150); // Number of stars
+    createStars(100);
     animateStars();
 
     /*******************************************************
-     * FADE-IN SECTIONS ON SCROLL
+     * POP-IN ANIMATIONS ON SCROLL
      *******************************************************/
     const sections = document.querySelectorAll('section');
     const options = { threshold: 0.1 };
+
     const observer = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
