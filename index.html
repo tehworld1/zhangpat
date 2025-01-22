@@ -1,362 +1,359 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patrick Zhang</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.158.0/three.min.js"></script>
-    <style>
-        /* Previous styles remain the same until hero section */
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Patrick Zhang | Space Theme</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" 
+    rel="stylesheet"
+  >
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            cursor: none;
-        }
+  <style>
+    /*************************************
+     *          RESET & BASE
+     *************************************/
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #000; /* Fallback background (stars will be canvas) */
+      color: #fff;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      position: relative; /* For stacking the canvas behind content */
+    }
 
-        :root {
-            --cursor-size: 20px;
-        }
+    /*************************************
+     *          STARFIELD CANVAS
+     *************************************/
+    #stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1; /* Behind everything */
+      display: block;
+      background: #000; /* Additional safety */
+    }
 
-        #particle-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
+    /*************************************
+     *         NAVIGATION BAR
+     *************************************/
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 1rem 2rem;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+      z-index: 999;
+    }
+    nav ul {
+      display: flex;
+      justify-content: flex-end;
+      list-style: none;
+    }
+    nav li {
+      margin-left: 2rem;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #cccccc;
+    }
 
-        .cursor {
-            width: var(--cursor-size);
-            height: var(--cursor-size);
-            background: #fff;
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            mix-blend-mode: difference;
-            z-index: 9999;
-            transition: transform 0.2s;
-        }
+    /*************************************
+     *          HERO SECTION
+     *************************************/
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      padding: 0 1rem;
+    }
+    header h1 {
+      font-size: 3rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    header p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      line-height: 1.6;
+      color: #ccc;
+    }
+    .scroll-down {
+      position: absolute;
+      bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: transform 0.3s;
+    }
+    .scroll-down:hover {
+      transform: translateY(-3px);
+    }
+    .scroll-down span {
+      margin-top: 0.5rem;
+      font-size: 1.2rem;
+      animation: bounce 1.5s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
 
-        .cursor-trail {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            background: #fff;
-            border-radius: 50%;
-            pointer-events: none;
-            mix-blend-mode: difference;
-            z-index: 9998;
-            opacity: 0.5;
-        }
+    /*************************************
+     *          MAIN CONTENT
+     *************************************/
+    main {
+      width: 90%;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    section {
+      padding: 4rem 0;
+      opacity: 0;                /* for fade-in animation */
+      transform: translateY(40px);
+      transition: all 0.7s ease-out;
+    }
+    section.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    section h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+    section h2::after {
+      content: "";
+      display: block;
+      width: 60px;
+      height: 2px;
+      background: #ccc;
+      margin-top: 8px;
+    }
+    section p, section li {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #ccc;
+    }
+    ul.custom-list {
+      list-style: none;
+      padding-left: 0;
+    }
+    ul.custom-list li {
+      position: relative;
+      padding-left: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    ul.custom-list li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #ccc;
+    }
 
-        body {
-            background: #0a0a0a;
-            color: #fff;
-            font-family: 'Space Grotesk', sans-serif;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+    /*************************************
+     *          FOOTER
+     *************************************/
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      color: #777;
+      font-size: 0.9rem;
+    }
 
-        .noise {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            opacity: 0.05;
-            z-index: 9998;
-            background: url('data:image/svg+xml,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="1"/></svg>');
-        }
-
-        /* Previous container styles remain the same */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-            perspective: 1000px;
-        }
-
-        /* Enhanced 3D text effect */
-        h1 {
-            font-size: 8rem;
-            font-weight: 700;
-            line-height: 1.2;
-            position: relative;
-            transform-style: preserve-3d;
-        }
-
-        .text-3d {
-            position: relative;
-            transform-style: preserve-3d;
-        }
-
-        .text-3d span {
-            position: absolute;
-            left: 0;
-            top: 0;
-            transform-style: preserve-3d;
-            background: linear-gradient(to right, #fff 0%, #808080 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .game-card {
-            background: rgba(26, 26, 26, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            border-radius: 15px;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid #333;
-            position: relative;
-            overflow: hidden;
-            transform-style: preserve-3d;
-        }
-
-        .game-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), 
-                                    rgba(255,255,255,0.1) 0%, 
-                                    rgba(255,255,255,0) 50%);
-            opacity: 0;
-            transition: opacity 0.5s;
-        }
-
-        .game-card:hover::before {
-            opacity: 1;
-        }
-
-        /* Interactive ripple effect */
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            transform: scale(0);
-            animation: ripple 0.6s linear;
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        @keyframes ripple {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-
-        /* Previous styles remain the same */
-
-        /* New floating effect for activity items */
-        .activity-item {
-            animation: float 10s ease-in-out infinite;
-            animation-delay: calc(var(--delay) * 1s);
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(1deg); }
-        }
-
-        /* Interactive background gradient */
-        .interactive-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), 
-                                    rgba(255,255,255,0.1) 0%, 
-                                    rgba(0,0,0,0) 50%);
-            pointer-events: none;
-            z-index: 1;
-        }
-
-    </style>
+    /*************************************
+     *         RESPONSIVE DESIGN
+     *************************************/
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2rem;
+      }
+      header p {
+        font-size: 1rem;
+      }
+      nav ul {
+        justify-content: center;
+      }
+    }
+  </style>
 </head>
 <body>
-    <canvas id="particle-canvas"></canvas>
-    <div class="cursor"></div>
-    <div class="interactive-bg"></div>
-    <div class="noise"></div>
 
-    <!-- Previous HTML structure remains the same -->
-    <!-- Just add data-tilt attribute to cards -->
-    <div class="hero">
-        <div class="container hero-content">
-            <h1 class="text-3d" data-text="Patrick Zhang">Patrick Zhang</h1>
-            <p class="subtitle">High School Student • Tech Guy • Gamer</p>
-        </div>
-    </div>
+  <!-- STARFIELD CANVAS -->
+  <canvas id="stars"></canvas>
 
-    <div class="container">
-        <!-- Previous sections remain the same but add data-tilt to cards -->
-        <div class="section" id="about">
-            <h2 class="section-title"><span class="emoji">🇭🇰</span>About Me</h2>
-            <p>Hey! I'm Patrick Zhang, a high school student who loves gaming and computers. I'm currently a junior at LHS, and I'm involved in a couple clubs and activities. I'm interested in pursuing a career in computer science (or something else possibly). If you need tech support or anything let me know, I'll be here.</p>
-        </div>
+  <!-- NAVIGATION BAR -->
+  <nav>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#birthday">Birthday</a></li>
+      <li><a href="#games">Games</a></li>
+      <li><a href="#extracurriculars">Extracurriculars</a></li>
+    </ul>
+  </nav>
 
-        <div class="section">
-            <h2 class="section-title"><span class="emoji">🎉</span>Birthday</h2>
-            <p>July 29th</p>
-        </div>
+  <!-- HERO SECTION -->
+  <header>
+    <h1>Patrick Zhang</h1>
+    <p>High School Student | Tech Enthusiast | Gamer</p>
+    <a href="#about" class="scroll-down">
+      Scroll Down
+      <span>↓</span>
+    </a>
+  </header>
 
-        <div class="section">
-            <h2 class="section-title"><span class="emoji">🎮</span>Games I Love</h2>
-            <div class="games-grid">
-                <div class="game-card" data-tilt>Core Keeper</div>
-                <div class="game-card" data-tilt>Fortnite</div>
-                <div class="game-card" data-tilt>Genshin Impact</div>
-                <div class="game-card" data-tilt>Wuthering Waves</div>
-                <div class="game-card" data-tilt>Journey</div>
-            </div>
-        </div>
+  <!-- MAIN CONTENT -->
+  <main>
+    <!-- About Section -->
+    <section id="about">
+      <h2>About Me 🇭🇰🇨🇳</h2>
+      <p>
+        Hey! I'm Patrick Zhang, a high school student who loves gaming and computers.
+        I'm currently a junior at LHS, and I'm involved in a couple clubs and activities.
+        I'm interested in pursuing a career in computer science (or something else possibly).
+        If you need tech support or anything, let me know—I'll be here.
+      </p>
+    </section>
 
-        <div class="section">
-            <h2 class="section-title"><span class="emoji">🏅</span>Extracurriculars</h2>
-            <div class="activities">
-                <div class="activity-item" style="--delay: 0">JV Tennis: 9th - Now</div>
-                <div class="activity-item" style="--delay: 1">Environmental Club: 9th - Now</div>
-                <div class="activity-item" style="--delay: 2">LHS Sustainability Project: 9th - Now</div>
-                <div class="activity-item" style="--delay: 3">Math Team: 10th - Now</div>
-                <div class="activity-item" style="--delay: 4">PJAS: Sophomore - 10th - Now</div>
-                <div class="activity-item" style="--delay: 5">Community Service: 40+ Hours</div>
-            </div>
-        </div>
-    </div>
+    <!-- Birthday Section -->
+    <section id="birthday">
+      <h2>Birthday 🎉</h2>
+      <p>
+        July 29th
+      </p>
+    </section>
 
-    <script>
-        // Previous script content remains, adding new features:
+    <!-- Games Section -->
+    <section id="games">
+      <h2>Games 🎮</h2>
+      <p>
+        Playing video games is a large part of my free time, so here are some of my current favorites:
+      </p>
+      <ul class="custom-list">
+        <li>Core Keeper</li>
+        <li>Fortnite</li>
+        <li>Genshin Impact</li>
+        <li>Wuthering Waves</li>
+        <li>Journey</li>
+      </ul>
+    </section>
 
-        // Particle system
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ 
-            canvas: document.getElementById('particle-canvas'),
-            alpha: true 
+    <!-- Extracurriculars Section -->
+    <section id="extracurriculars">
+      <h2>Extracurriculars 🏅</h2>
+      <ul class="custom-list">
+        <li>JV Tennis: 9th - Now</li>
+        <li>Environmental Club: 9th - Now</li>
+        <li>LHS Sustainability Project: 9th - Now</li>
+        <li>Math Team: 10th - Now</li>
+        <li>PJAS: Sophomore - 10th - Now</li>
+        <li>Community Service: 40+ Hours</li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    &copy; 2025 Patrick Zhang
+  </footer>
+
+  <!-- SCRIPT: STARFIELD + FADE-IN -->
+  <script>
+    /*******************************************************
+     * STARFIELD ANIMATION
+     *******************************************************/
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    let starsArray = [];
+
+    function initCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', initCanvas);
+
+    function createStars(num) {
+      // Clear previous stars
+      starsArray = [];
+      for (let i = 0; i < num; i++) {
+        starsArray.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 1.5 + 0.5,
+          speed: Math.random() * 0.5 + 0.2
         });
-        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+    }
 
-        const particles = new THREE.BufferGeometry();
-        const particleCount = 1000;
-        const posArray = new Float32Array(particleCount * 3);
+    function animateStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        for(let i = 0; i < particleCount * 3; i++) {
-            posArray[i] = (Math.random() - 0.5) * 5;
+      ctx.fillStyle = "#fff";
+      for (let i = 0; i < starsArray.length; i++) {
+        const star = starsArray[i];
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Move star downward
+        star.y += star.speed;
+
+        // If star goes off-screen, reset to top
+        if (star.y > canvas.height) {
+          star.x = Math.random() * canvas.width;
+          star.y = -star.radius;
         }
+      }
 
-        particles.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+      requestAnimationFrame(animateStars);
+    }
 
-        const material = new THREE.PointsMaterial({
-            size: 0.005,
-            color: 0xffffff,
-            transparent: true,
-            opacity: 0.8
-        });
+    // Initialize canvas and starfield
+    initCanvas();
+    createStars(150); // Number of stars
+    animateStars();
 
-        const particlesMesh = new THREE.Points(particles, material);
-        scene.add(particlesMesh);
-        camera.position.z = 3;
-
-        // Cursor trail
-        const trails = [];
-        const trailCount = 10;
-
-        for(let i = 0; i < trailCount; i++) {
-            const trail = document.createElement('div');
-            trail.className = 'cursor-trail';
-            document.body.appendChild(trail);
-            trails.push(trail);
+    /*******************************************************
+     * FADE-IN SECTIONS ON SCROLL
+     *******************************************************/
+    const sections = document.querySelectorAll('section');
+    const options = { threshold: 0.1 };
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+          obs.unobserve(entry.target);
         }
+      });
+    }, options);
 
-        let mouseX = 0;
-        let mouseY = 0;
-        let trailPoints = Array(trailCount).fill().map(() => ({x: 0, y: 0}));
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            
-            // Update interactive background
-            document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
-            document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
-        });
-
-        // Animation loop
-        function animate() {
-            requestAnimationFrame(animate);
-
-            // Update particle system
-            particlesMesh.rotation.x += 0.001;
-            particlesMesh.rotation.y += 0.001;
-            renderer.render(scene, camera);
-
-            // Update cursor trails
-            trailPoints.unshift({x: mouseX, y: mouseY});
-            trailPoints.pop();
-
-            trails.forEach((trail, index) => {
-                const point = trailPoints[index];
-                gsap.to(trail, {
-                    x: point.x - trail.offsetWidth / 2,
-                    y: point.y - trail.offsetHeight / 2,
-                    duration: 0.2
-                });
-            });
-        }
-
-        animate();
-
-        // Ripple effect
-        document.addEventListener('click', function(e) {
-            const ripple = document.createElement('div');
-            ripple.className = 'ripple';
-            ripple.style.left = `${e.clientX}px`;
-            ripple.style.top = `${e.clientY}px`;
-            document.body.appendChild(ripple);
-            
-            ripple.addEventListener('animationend', () => {
-                ripple.remove();
-            });
-        });
-
-        // 3D Text Effect
-        const title = document.querySelector('.text-3d');
-        const text = title.textContent;
-        title.textContent = '';
-        
-        for(let i = 0; i < 10; i++) {
-            const span = document.createElement('span');
-            span.textContent = text;
-            span.style.transform = `translateZ(${i * -20}px)`;
-            span.style.opacity = i === 0 ? 1 : 0.2 - (i * 0.02);
-            title.appendChild(span);
-        }
-
-        // Previous event listeners and animations remain the same
-
-        // Resize handler
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-    </script>
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+  </script>
 </body>
 </html>
