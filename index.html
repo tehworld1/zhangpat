@@ -1,94 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="dark" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patrick Zhang</title>
-    <meta name="description" content="contact" />
-
-    <!-- Pico.css -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.classless.min.css"
-    />
-  </head>
-
-  <body>
-    <!-- Header -->
-    <header>
-      </hgroup>
-        <h1>Patrick Zhang</h1>
-        <p><a href=https://linkspat.pages.dev/ style="display: inline; text-decoration: none; color: #007bff; font-weight: bold;">
-            Click to contact me!</a></p>
-      </hgroup>
-      <!-- <nav> -->
-        <!-- put it here ungreen -->
-        </header>
-    
-    <main>
-      <!-- Preview -->
-      <section id="preview">
-        <h2>About Me 🇭🇰🇨🇳</h2>
-        <p>
-          Hey! I'm Patrick Zhang, a high school student who loves gaming and computers.
-          I'm currently a junior at LHS, and I'm involved in a couple clubs and activities.
-          I'm interested in pursuing a career in computer science (or something else possibly).
-          If you need tech support or anything let me know, I'll be here.
-        </p>
-        </section>
-      
-      <!-- ./ bday -->
-      <section id="birth">
-      <h2>Birthday 🎉</h2>
-        <p style="display: inline; margin-right: 10px;">July 29th</p>
-        <a href="mailto:?subject=Patrick's+Birthday+Today!!&body=Hi!%0A%0ASend+yourself+a+reminder+for+my+birthday+by+setting+a+schedule+send+email+to+yourself!" style="display: inline; text-decoration: none; color: #007bff; font-weight: bold;">
-            Click to set yourself a reminder!
-        </a>
-
-      </div></section>
-        <section id="games">
-        <h2>Games 🎮</h2>
-        <p>Playing video games is a large part of my free time, so here's some of my current favorites:</p>
-        <ul>
-          <li>Core Keeper</li>
-          <li>Fortnite</li>
-          <li>Genshin Impact</li>
-          <li>Sea Of Thieves</li>
-          <li>Overwatch</li>
-        </ul>
-
-
-
-        <!-- Inline text elements-->
-        </div></section>
-          <section id="games">
-          <h2>Extracurriculars 🏅</h2>
-          <ul>
-            <li>JV Tennis: 9th - Now</li>
-            <li>Environmental Club: 9th - Now</li>
-            <li>LHS Sustainability Project: 9th - Now</li>
-            <li>Math Team: 10th - Now</li>
-            <li>PJAS: Sophomore - 10th - Now</li>
-            <li>Community Service: 40+ Hours</li>
-          </ul>
-
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
         
-    <<!-- Footer -->
-                <footer>
-                  <small
-                    >Built with <a href="https://picocss.com">Pico</a> •
-                      Powered by Cloudflare • Cleaner than <a href ="https://www.websitecarbon.com/website/zhangpat-pages-dev/"> 100% of websites globally.</a></a></small
-                  >
-                </footer>
-                <!-- ./ Footer -->
-
-                
-                    </footer>
-                  </article>
-                </dialog>
-                <!-- ./ Modal example -->
-
-               
-              </body>
-            </html>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        .header {
+            width: 100%;
+            background: #111;
+            padding: 20px;
+            text-align: center;
+            font-size: 26px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            border-bottom: 2px solid #fff;
+        }
+        .container {
+            max-width: 800px;
+            background: #111;
+            padding: 40px;
+            box-shadow: 0px 10px 30px rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            margin-top: 100px;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+        h2 {
+            text-align: center;
+            color: #f5f5f5;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .section {
+            margin-bottom: 25px;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards 0.3s;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        ul li {
+            background: #222;
+            color: #fff;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+        }
+        ul li:hover {
+            background: #fff;
+            color: #000;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Patrick Zhang</div>
+    <div class="container">
+        <h2>About Me ⚡</h2>
+        <p>Hey! I'm <strong>Patrick Zhang</strong>, a high school student who loves gaming and computers. I'm currently a junior at LHS, and I'm involved in a couple of clubs and activities. I'm interested in pursuing a career in computer science (or something else possibly). If you need tech support or anything, let me know, I'll be here.</p>
+        
+        <div class="section">
+            <h2>Birthday 🎂</h2>
+            <p>July 29th</p>
+        </div>
+        
+        <div class="section">
+            <h2>Games 🎮</h2>
+            <ul>
+                <li>Core Keeper</li>
+                <li>Fortnite</li>
+                <li>Genshin Impact</li>
+                <li>Wuthering Waves</li>
+                <li>Journey</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>Extracurriculars 🏆</h2>
+            <ul>
+                <li>JV Tennis: 9th - Now</li>
+                <li>Environmental Club: 9th - Now</li>
+                <li>LHS Sustainability Project: 9th - Now</li>
+                <li>Math Team: 10th - Now</li>
+                <li>PJAS: Sophomore - 10th - Now</li>
+                <li>Community Service: 40+ Hours</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
